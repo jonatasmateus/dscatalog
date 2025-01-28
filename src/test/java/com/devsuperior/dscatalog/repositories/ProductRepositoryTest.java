@@ -18,11 +18,13 @@ class ProductRepositoryTest {
     private ProductRepository repository;
 
     private long existingId;
+    private long nonExistingId;
     private long countTotalProducts;
 
     @BeforeEach
     void setUp() {
         existingId = 1L;
+        nonExistingId = 100;
         countTotalProducts = 25L;
     }
 
@@ -50,5 +52,22 @@ class ProductRepositoryTest {
         assertEquals(countTotalProducts + 1, product.getId());
     }
 
+    @Test
+    void findByIdShouldReturnOptionalNotNullWhenIdExists() {
+        // Act
+        Optional<Product> result = repository.findById(existingId);
 
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(existingId, result.get().getId());
+    }
+
+    @Test
+    void findByIdShouldReturnOptionalNullWhenIdDoesNotExist() {
+        // Act
+        Optional<Product> result = repository.findById(nonExistingId);
+
+        // Assert
+        assertFalse(result.isPresent());
+    }
 }
